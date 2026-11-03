@@ -1,7 +1,7 @@
 # MyBudget – Household Account Book
 
 Software System Design project (Topic 4: Household Account Book Program).  
-Author: Maria Nolte De Sena (202630405) – Chonnam National University, Dept. Artificial Intelligence.
+Author: Maria Nolte De Sena – Chonnam National University.
 
 MyBudget is a Java Swing desktop application to register income and expense
 transactions, edit and delete them, search and filter them by month, category
