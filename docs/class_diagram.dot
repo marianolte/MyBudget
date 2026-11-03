@@ -1,0 +1,56 @@
+digraph MyBudget {
+  graph [rankdir=TB, fontname="Helvetica", nodesep=0.6, ranksep=0.8, bgcolor="white", pad=0.3];
+  node  [shape=plaintext, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10, arrowhead=vee, arrowsize=0.9];
+
+  MyBudgetApp [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>MyBudgetApp</b></td></tr>
+    <tr><td sides="T" border="1" align="left">+ main(args : String[]) : void</td></tr></table>>];
+
+  MainWindow [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>MainWindow</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- accountBook : AccountBook<br/>- filePath : String</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ openAddTransaction() : void<br/>+ openTransactionList() : void<br/>+ showSummary() : void<br/>+ saveData() : boolean<br/>+ loadData() : void</td></tr></table>>];
+
+  TransactionListWindow [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>TransactionListWindow</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- accountBook : AccountBook<br/>- table : JTable</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ refresh() : void<br/>- search() : void<br/>- editSelected() : void<br/>- deleteSelected() : void</td></tr></table>>];
+
+  TransactionDialog [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>TransactionDialog</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- accountBook : AccountBook<br/>- editing : Transaction</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ showDialog() : boolean<br/>- save() : void</td></tr></table>>];
+
+  SummaryDialog [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>SummaryDialog</b></td></tr>
+    <tr><td sides="T" border="1" align="left"> </td></tr>
+    <tr><td sides="T" border="1" align="left">+ SummaryDialog(owner : Window, summary : FinancialSummary)</td></tr></table>>];
+
+  AccountBook [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>AccountBook</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- transactions : ArrayList&lt;Transaction&gt;<br/>- nextId : int</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ addTransaction(date : Date, amount : double, type : String,<br/>      category : String, description : String) : boolean<br/>+ editTransaction(transactionId : int, date : Date, amount : double,<br/>      type : String, category : String, description : String) : boolean<br/>+ deleteTransaction(transactionId : int) : boolean<br/>+ getAllTransactions() : ArrayList&lt;Transaction&gt;<br/>+ searchTransactions(month : String, category : String,<br/>      type : String) : ArrayList&lt;Transaction&gt;<br/>+ calculateSummary() : FinancialSummary<br/>+ saveToFile(path : String) : boolean<br/>+ loadFromFile(path : String) : ArrayList&lt;Transaction&gt;</td></tr></table>>];
+
+  Transaction [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>Transaction</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- id : int<br/>- date : Date<br/>- amount : double<br/>- type : String<br/>- category : String<br/>- description : String</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ Transaction(id : int, date : Date, amount : double,<br/>      type : String, category : String, description : String)<br/>+ getId() : int<br/>+ getDate() : Date<br/>+ getAmount() : double<br/>+ getType() : String<br/>+ getCategory() : String<br/>+ getDescription() : String<br/>+ setDate(date : Date) : void<br/>+ setAmount(amount : double) : void<br/>+ setType(type : String) : void<br/>+ setCategory(category : String) : void<br/>+ setDescription(description : String) : void<br/>+ getDateText() : String<br/>+ getMonth() : String<br/>+ getAmountText() : String<br/>+ toString() : String</td></tr></table>>];
+
+  FinancialSummary [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+    <tr><td><b>FinancialSummary</b></td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">- totalIncome : double<br/>- totalExpenses : double<br/>- balance : double</td></tr>
+    <tr><td sides="T" border="1" align="left" balign="left">+ FinancialSummary(totalIncome : double,<br/>      totalExpenses : double)<br/>+ getTotalIncome() : double<br/>+ getTotalExpenses() : double<br/>+ getBalance() : double</td></tr></table>>];
+
+  {rank=same; TransactionListWindow; SummaryDialog;}
+  {rank=same; Transaction; FinancialSummary;}
+
+  MyBudgetApp -> MainWindow;
+  MainWindow -> TransactionListWindow;
+  MainWindow -> SummaryDialog;
+  TransactionListWindow -> TransactionDialog;
+  MainWindow -> TransactionDialog;
+  MainWindow -> AccountBook [taillabel="1", headlabel="1", labeldistance=2];
+  AccountBook -> Transaction [dir=both, arrowtail=diamond, arrowhead=none, taillabel="1", headlabel="0..*", labeldistance=2];
+  AccountBook -> FinancialSummary;
+}
